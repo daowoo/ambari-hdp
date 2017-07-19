@@ -1,2 +1,4 @@
-# ambari-hdp
-git book storage
+# 前言
+
+本书记录了在HDP大数据平台上，针对各个组件的学习历程和随手笔记。
+
