@@ -34,37 +34,37 @@ HBase是典型的NoSQL数据库，通过行健(Rowkey)检索数据，仅支持�
 ## 核心模块
 ![](/assets/a2.jpg)
 
-- 客户端Client
-整个HBase系统的入口，使用者直接通过Client操作HBase。
-对于管理类操作，Client与HMaster进行RPC通信；
-对于数据读写类操作，Client与RegionServer进行RPC交互。
+- **Client**
+ - 使用HBase的RPC机制与HMaster和HRegionServer进行通信。
+ - 对于管理类操作，Client与HMaster进行RPC。
+ - 对于数据读写类操作，Client与HRegionServer进行RPC。
 
-- 协调服务组件Zookeeper
-存储HBase元数据信息、实时监控RegionServer、存储所有Region的寻址入口，还有保证HBase集群中只有一个HMaster节点。
 
-- 主节点HMaster
-可以启动多个HMaster,通过ZooKeeper的Master选举机制保证总有一个Master正常运行并提供服务，其他的HMaster作为备选时刻准备，当目前的HMaster出现问题时提供服务。
-HMaster主要负责的管理工作：
-```
-管理用户对Table的增、删、改、查操作
-管理RegionServer的负载均衡，调整Region分布
-在Region分裂后，负责新Region的分配
-在RegionServer死机后，负责失效RegionServer上的Region迁移
-HMaster失效仅会导致所有元数据无法修改，表的数据读写还是可以正常运行
-```
+- **Zookeeper**
+ - 通过选举，保证任何时候，集群中只有一个master，Master与RegionServer启动时均会向ZooKeeper注册。
+ - 实时监控Regionserver的上线和下线信息,并实时通知给Master，使得HMaster可以随时感知到各个HRegionServer的健康状态。
+ - 存贮所有Region的寻址入口和HBase的schema和table元数据。
+ - Zookeeper的引入实现HMaster主从节点的failover，避免了HMaster的单点问题。
+ 
 
-- Region节点HRegionServer
-其内部管理了一系列HRegion对象，每个HRegion对应了Table中的一个Region，region是hbase中分布式存储和负载均衡的最小单元，不同的regioon分布到不同的regionserver上。
+- **HMaster**
+ - HBase中可以启动多个HMaster，通过Zookeeper的选主机制保证总有一个Master运行
+ - 处理schema更新请求 (创建、删除、修改Table的定义）。
+ - 管理HRegionServer的负载均衡，调整Region分布。
+ - 管理和分配HRegion，比如在HRegion split时分配新的HRegion；在HRegionServer退出时迁移其内的HRegion到其他HRegionServer上。
+ - 监控集群中所有HRegionServer的状态(通过Heartbeat和监听ZooKeeper中的状态)。
+ 
 
- HRegion由多个HStore组成，每个HStore对应了Table中的一个HColumnFamily(列簇，用户创建表时定义的）。每个Column Family其实就是一个集中的存储单元,它包含若干个物理存储上的HFile，因此将具备共同I/O特性的列放在一个Column Family中，保证读写的高效率。
-```
-RegionServer维护region，处理这些region的IO请求
-RegionServer负责切分在运行过程中变得过大的region
-client访问HBase上数据的过程并不需要HMaster参与，寻址访问先ZooKeeper再Regionserver，数据读写访问Regioneserver
-主要负责响应用户I/O请求，向HDFS文件系统中读写数据
-```
+- **HRegionServer**
+ - 维护Master分配给它的region，处理对这些region的IO请求。
+ - 负责切分在运行过程中变得过大的region。
+ 
+ 
+ - **结论**
+  - client访问hbase上数据的过程并不需要master参与（寻址访问zookeeper，数据读写访问regione server），master仅仅维护者table和region的元数据信息，负载很低。
+  - HRegion所处理的数据尽量和数据所在的DataNode在一起，实现数据的本地化。
 
-- 工作过程
+## 工作过程
 HRegionServer负责打开Region，并创建HRegion实例，HRegion会为每个表的HColumnFamily（用户创建表时定义的）创建一个Store实例。每个Store实例包含一个或多个StoreFile实例，StoreFile是实际数据存储文件HFile的轻量级封装，每个Store会对应一个MemStore。
 
  写入数据时数据会先写入Hlog中，成功后再写入MemStore中。Memstore中的数据因为空间有限，所以需要定期flush到文件StoreFile中，每次flush都是生成新的StoreFile。HRegionServer在处理Flush请求时，将数据写成HFile文件永久存储到HDFS上，并且存储最后写入的数据序列号。
