@@ -165,6 +165,7 @@ hbase(main):042:0> t1 = create 't2', 'f1'
 ```
 
 ### describe / desc
+
 查看表的结构、属性和列族的属性。
 
 ```
@@ -179,7 +180,8 @@ COLUMN FAMILIES DESCRIPTION
 1 row(s) in 0.0230 seconds
 ```
 
-###　list
+### list
+
 列出所有表，可选参数通过正则表达式来过滤输出。
 
 ```
@@ -197,47 +199,47 @@ hbase(main):038:0> list 'ns1:.*'
 ```
 
 ### alter
+
 修改，增加，删除表的列族信息、属性、配置等。
 
-```
-#对于表t1，如果t1含有f1列族，则将f1列族的版本数设为5.
-# 如果t1不含f1列数，则添加f1列族到表t1上，并将f1的版本数设置为5.
-hbase(main):014:0> alter 't1', NAME => 'f1', VERSIONS => 5
+    #对于表t1，如果t1含有f1列族，则将f1列族的版本数设为5.
+    # 如果t1不含f1列数，则添加f1列族到表t1上，并将f1的版本数设置为5.
+    hbase(main):014:0> alter 't1', NAME => 'f1', VERSIONS => 5
 
-#添加或修改列族f2和f3，列族f1保持不变
-hbase(main):014:0> alter 't1', 'f1', {NAME => 'f2', IN_MEMORY => true}, {NAME => 'f3', VERSIONS => 5}
+    #添加或修改列族f2和f3，列族f1保持不变
+    hbase(main):014:0> alter 't1', 'f1', {NAME => 'f2', IN_MEMORY => true}, {NAME => 'f3', VERSIONS => 5}
 
-#删除名空间ns1中的表t1的列族f1的两种方法
-hbase(main):014:0> alter 'ns1:t1', NAME => 'f1', METHOD => 'delete'
-hbase(main):014:0> alter 'ns1:t1', 'delete' => 'f1'
+    #删除名空间ns1中的表t1的列族f1的两种方法
+    hbase(main):014:0> alter 'ns1:t1', NAME => 'f1', METHOD => 'delete'
+    hbase(main):014:0> alter 'ns1:t1', 'delete' => 'f1'
 
-#比如 `MAX_FILESIZE`,`READONLY`,`MEMSTORE_FLUSHSIZE`, `DEFERRED_LOG_FLUSH`
-#等在表范围内生效的属性，此时会覆盖全局配置中的默认属性
-#修改表t1的MAX_FILESIZE属性的值。
-hbase(main):014:0> alter 't1', MAX_FILESIZE => '134217728'
+    #比如 `MAX_FILESIZE`,`READONLY`,`MEMSTORE_FLUSHSIZE`, `DEFERRED_LOG_FLUSH`
+    #等在表范围内生效的属性，此时会覆盖全局配置中的默认属性
+    #修改表t1的MAX_FILESIZE属性的值。
+    hbase(main):014:0> alter 't1', MAX_FILESIZE => '134217728'
 
-# 修改表t1或者列族f2的配置
-hbase(main):014:0> alter 't1', CONFIGURATION => {'hbase.hregion.scan.loadColumnFamiliesOnDemand' => 'true'}
-hbase(main):014:0> alter 't1', {NAME => 'f2', CONFIGURATION => {'hbase.hstore.blockingStoreFiles' => '10'}}
+    # 修改表t1或者列族f2的配置
+    hbase(main):014:0> alter 't1', CONFIGURATION => {'hbase.hregion.scan.loadColumnFamiliesOnDemand' => 'true'}
+    hbase(main):014:0> alter 't1', {NAME => 'f2', CONFIGURATION => {'hbase.hstore.blockingStoreFiles' => '10'}}
 
-#删除属性
-hbase(main):014:0> alter 't1', METHOD => 'table_att_unset', NAME => 'MAX_FILESIZE'
+    #删除属性
+    hbase(main):014:0> alter 't1', METHOD => 'table_att_unset', NAME => 'MAX_FILESIZE'
 
-#一次性修改多个属性值
-hbase(main):014:0> alter 't1', { NAME => 'f1', VERSIONS => 3 }, 
-  { MAX_FILESIZE => '134217728' }, { METHOD => 'delete', NAME => 'f2' },
-  OWNER => 'johndoe', METADATA => { 'mykey' => 'myvalue' }
-```
+    #一次性修改多个属性值
+    hbase(main):014:0> alter 't1', { NAME => 'f1', VERSIONS => 3 }, 
+      { MAX_FILESIZE => '134217728' }, { METHOD => 'delete', NAME => 'f2' },
+      OWNER => 'johndoe', METADATA => { 'mykey' => 'myvalue' }
 
-### alter_async
+### alter\_async
+
 异步的修改表结构，不用等待该表所有的regions都接收到shecma的变更请求，与alter的作用相同。
 
 ```
 hbase(main):024:0> alter_async 't1', METHOD => 'table_att_unset', NAME => 'MAX_FILESIZE'
-
 ```
 
 ### disable
+
 关闭指定的表，其后必须附带表名参数。
 
 ```
@@ -245,7 +247,8 @@ hbase(main):046:0> disable 'test1'
 0 row(s) in 2.2900 seconds
 ```
 
-### disable_all
+### disable\_all
+
 关闭满足正则表达式条件的所有表。
 
 ```
@@ -259,7 +262,8 @@ y
 2 tables successfully disabled
 ```
 
-### is_disabled
+### is\_disabled
+
 判断指定的表是否处于关闭状态。
 
 ```
@@ -269,6 +273,7 @@ true
 ```
 
 ### drop
+
 删除指定的表，删除之前必须先关闭该表。
 
 ```
@@ -282,7 +287,8 @@ Drop the named table. Table must first be disabled:
   hbase> drop 'ns1:t1'
 ```
 
-### drop_all
+### drop\_all
+
 删除满足正则表达式条件的所有表，这些表都必须处于关闭状态。
 
 ```
@@ -298,6 +304,7 @@ n
 ```
 
 ### enable
+
 与disble相反，打开指定的表，其后也必须附带表名参数。
 
 ```
@@ -305,7 +312,8 @@ hbase(main):047:0> enable 'test1'
 0 row(s) in 2.2890 seconds
 ```
 
-### enable_all
+### enable\_all
+
 打开满足正则表达式条件的所有表。
 
 ```
@@ -318,7 +326,8 @@ y
 2 tables successfully enabled
 ```
 
-### is_enabled
+### is\_enabled
+
 判断指定的表是否处于打开状态。
 
 ```
@@ -328,6 +337,7 @@ true
 ```
 
 ### exists
+
 判断指定的表是否实际存在。
 
 ```
@@ -340,7 +350,8 @@ Table test does exist
 0 row(s) in 0.0120 seconds
 ```
 
-### get_table
+### get\_table
+
 返回一个表的引用对象。
 
 ```
@@ -353,7 +364,8 @@ t1d.describe
 ...
 ```
 
-### show_filters
+### show\_filters
+
 显示所有的过滤器。
 
 ```
@@ -378,7 +390,8 @@ ValueFilter
 ColumnPaginationFilter
 ```
 
-### alter_statu
+### alter\_statu
+
 返回alter命令的执行状态，指示在alter操作过程中表的regions中有那些region接收到了更新。
 
 ```
@@ -392,7 +405,9 @@ Done.
 ```
 
 ## DML
+
 ### scan
+
 扫描某一个表，显示出满足条件的所有数据。
 
 ```
@@ -430,6 +445,7 @@ hbase> t11.scan
 ```
 
 ### append
+
 在表的Cell的值后面追加字符串。
 
 ```
@@ -441,6 +457,7 @@ hbase> t11.append 'r1', 'c1', 'value'
 ```
 
 ### count
+
 统计表的行数，其中参数的含义如下：INTERVAL设置多少行显示一次及对应的rowkey，默认1000；CACHE每次去取的缓存区大小，默认是10，调整该参可提高查询速度。
 
 ```
@@ -458,6 +475,7 @@ hbase> t.count INTERVAL => 10, CACHE => 1000
 ```
 
 ### delete
+
 删除表中cell数据。
 
 ```
@@ -472,6 +490,7 @@ hbase> t.delete 'r1', 'c1',  ts1
 ```
 
 ### deleteall
+
 一次性删除多个cell数据。
 
 ```
@@ -494,6 +513,7 @@ hbase> t.deleteall 'r1', 'c1', ts1
 ```
 
 ### get
+
 得到某一列或cell的数据。
 
 ```
@@ -529,6 +549,7 @@ hbase> t.get 'r1', {COLUMN => 'c1', TIMESTAMP => ts1, VERSIONS => 4}
 ```
 
 ### put
+
 往Cell中添加数据。
 
 ```
@@ -549,6 +570,7 @@ t.put 'r1', 'c1', 'value', ts1, {ATTRIBUTES=>{'mykey'=>'myvalue'}}
 ```
 
 ### truncate
+
 强制删除表，不要求表已经disable。
 
 ```
@@ -559,126 +581,155 @@ Truncating 't1' table (it may take a while):
 0 row(s) in 3.9850 seconds
 ```
 
-### get_counter
+### get\_counter
 
 ```
+
 ```
 
 ### incr
 
 ```
+
 ```
 
 ## SURGERY
+
 ### assign
 
 ```
+
 ```
 
 ### unassign
 
 ```
+
 ```
 
 ### balancer
 
 ```
-```
-
-### balance_switch
 
 ```
+
+### balance\_switch
+
 ```
 
-### close_region
+```
+
+### close\_region
 
 ```
+
 ```
 
 ### compact
 
 ```
+
 ```
 
 ### flush
 
 ```
-```
-
-### major_compact
 
 ```
+
+### major\_compact
+
+```
+
 ```
 
 ### move
 
 ```
+
 ```
 
 ### split
 
 ```
-```
-
-### hlog_roll
 
 ```
+
+### hlog\_roll
+
 ```
 
-### zk_dump
-
-```
 ```
 
+### zk\_dump
+
+```
+
+```
 
 ## REPLICATION
-### add_peer
+
+### add\_peer
 
 ```
-```
-
-### remove_peer
 
 ```
-```
 
-### list_peers
-
-```
-```
-
-### enable_peer
+### remove\_peer
 
 ```
-```
-
-### disable_peer
 
 ```
-```
 
-### start_replication
-
-```
-```
-
-### stop_replication
+### list\_peers
 
 ```
+
+```
+
+### enable\_peer
+
+```
+
+```
+
+### disable\_peer
+
+```
+
+```
+
+### start\_replication
+
+```
+
+```
+
+### stop\_replication
+
+```
+
 ```
 
 ## SECURITY
+
 ### grant
 
 ```
+
 ```
 
 ### revoke
 
 ```
-```
-
-### user_permission
 
 ```
+
+### user\_permission
+
 ```
+
+```
+
+
+
