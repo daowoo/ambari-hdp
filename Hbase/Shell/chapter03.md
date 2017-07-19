@@ -47,7 +47,7 @@ hbase(main):013:0> desc 'test1'
 Table test1 is ENABLED                                                                                                              
 test1                                                                                                                               
 COLUMN FAMILIES DESCRIPTION                                                                                                         
-{NAME => 'Toutiao', BLOOMFILTER => 'ROW', VERSIONS => '1', IN_MEMORY => 'false', KEEP_DELETED_CELLS => 'FALSE', DATA_BLOCK_ENCODING 
+{NAME => 'Toutiao', BLOOMFILTER => 'ROW', VERSIONS => '1', IN_MEMORY => 'false', KEEP_DELETED_CELLS => 'FALSE', DATA_BLOCK_ENCODING
 => 'NONE', TTL => '259200 SECONDS (3 DAYS)', COMPRESSION => 'SNAPPY', MIN_VERSIONS => '0', BLOCKCACHE => 'true', BLOCKSIZE => '65536
 ', REPLICATION_SCOPE => '0'}                                                                                                        
 1 row(s) in 0.0230 seconds
@@ -98,7 +98,7 @@ hbase(main):014:0> alter 't1', {NAME => 'f2', CONFIGURATION => {'hbase.hstore.bl
 hbase(main):014:0> alter 't1', METHOD => 'table_att_unset', NAME => 'MAX_FILESIZE'
 
 #一次性修改多个属性值
-hbase(main):014:0> alter 't1', { NAME => 'f1', VERSIONS => 3 }, 
+hbase(main):014:0> alter 't1', { NAME => 'f1', VERSIONS => 3 },
   { MAX_FILESIZE => '134217728' }, { METHOD => 'delete', NAME => 'f2' },
   OWNER => 'johndoe', METADATA => { 'mykey' => 'myvalue' }
 ```
@@ -231,24 +231,24 @@ t1d.describe
 显示所有的过滤器。
 
 ```
-hbase(main):034:0> show_filters 
+hbase(main):034:0> show_filters
 DependentColumnFilter   
 KeyOnlyFilter   
 ColumnCountGetFilter  
 SingleColumnValueFilter  
-PrefixFilter 
-SingleColumnValueExcludeFilter 
-FirstKeyOnlyFilter 
-ColumnRangeFilter 
-TimestampsFilter 
-FamilyFilter 
-QualifierFilter 
-ColumnPrefixFilter 
-RowFilter 
-MultipleColumnPrefixFilter 
-InclusiveStopFilter 
-PageFilter 
-ValueFilter 
+PrefixFilter
+SingleColumnValueExcludeFilter
+FirstKeyOnlyFilter
+ColumnRangeFilter
+TimestampsFilter
+FamilyFilter
+QualifierFilter
+ColumnPrefixFilter
+RowFilter
+MultipleColumnPrefixFilter
+InclusiveStopFilter
+PageFilter
+ValueFilter
 ColumnPaginationFilter
 ```
 

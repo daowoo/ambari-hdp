@@ -16,7 +16,7 @@ hbase> scan 'ns1:t1', {COLUMNS => ['c1', 'c2']}
 hbase> scan 'ns1:t1', {COLUMNS => ['c1', 'c2'], LIMIT => 10}
 
 # 扫描命名空间ns1下表t1的列族'c1'和'c2'。显示出命名空间ns1下表t1的列族'c1'和'c2'，且只显示从rowkey=“xyz”开始的前10个rowkey的数据。
-hbase> scan 'ns1:t1', {COLUMNS => ['c1', 'c2'], LIMIT => 10, STARTROW => 'xyz'} 
+hbase> scan 'ns1:t1', {COLUMNS => ['c1', 'c2'], LIMIT => 10, STARTROW => 'xyz'}
 
 # 扫描默认命名空间下表t1的列族c1时间戳从'1303668804'到'1303668904'的数据
 hbase> scan 't1', {COLUMNS => 'c1', TIMERANGE => [1303668804, 1303668904]}
@@ -68,10 +68,10 @@ hbase> t.count INTERVAL => 10, CACHE => 1000
 删除表中cell数据。
 
 ```
-#删除命名空间ns1下的表t1的rowkey的r1的列c1，时间戳为ts1 
+#删除命名空间ns1下的表t1的rowkey的r1的列c1，时间戳为ts1
 hbase> delete 'ns1:t1', 'r1', 'c1', ts1
 
-#删除默认命名空间下的表t1的rowkey的r1的列c1，时间戳为ts1 
+#删除默认命名空间下的表t1的rowkey的r1的列c1，时间戳为ts1
 hbase> delete 't1', 'r1', 'c1', ts1
 
 #引用对象的用法
@@ -91,7 +91,7 @@ hbase> deleteall 't1', 'r1'
 #删除命名空间ns1下表t1的rowkey为r1的列c1的所有数据
 hbase> deleteall 't1', 'r1', 'c1'
 
-# 删除默认命名空间下的表t1的rowkey的r1的列c1，时间戳为ts1 
+# 删除默认命名空间下的表t1的rowkey的r1的列c1，时间戳为ts1
 hbase> deleteall 't1', 'r1', 'c1', ts1
 
 #引用对象的用法
@@ -163,15 +163,40 @@ hbase(main):041:0> truncate 't1'
 Truncating 't1' table (it may take a while):
  - Disabling table...
  - Truncating table...
-0 row(s) in 3.9850 seconds
-```
-
-## get_counter
-
-```
+0 row(s) in 3.9850
 ```
 
 ## incr
+在表中新增一列作为计数器，或者计数器自增。
 
 ```
+#在表ns1:t1的f2列族中新增计数器列c2
+hbase(main):021:0> tt.incr 'r1','f2:c2'
+COUNTER VALUE = 1
+0 row(s) in 0.0140 seconds
+
+#默认自增1
+hbase(main):021:0> tt.incr 'r1','f2:c2'
+COUNTER VALUE = 2
+0 row(s) in 0.0140 seconds
+
+#自增10
+hbase(main):005:0> tt.incr 'r1','f2:c2', 10
+COUNTER VALUE = 12
+0 row(s) in 0.0200 seconds
+
+#相当于自减10
+hbase(main):006:0> tt.incr 'r1','f2:c2', -10
+COUNTER VALUE = 2
+0 row(s) in 0.0470 seconds
+```
+
+## get_counter
+查询表中的计数器列的当前值，它不会触发计数器发生变化。
+
+```
+hbase(main):007:0> tt.get_counter 'r1','f2:c2'
+COUNTER VALUE = 2
+hbase(main):008:0> tt.get_counter 'r1','f2:c2'
+COUNTER VALUE = 2
 ```
