@@ -12,4 +12,4 @@
 
 * [优化](/Hbase/Optimization/README.md)
 
-* [测试](/Hbase/Test)
+* [测试](/Hbase/Test/README.md)
