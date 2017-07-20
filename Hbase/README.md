@@ -4,12 +4,12 @@
 
 * [原理](/Hbase/Elements/README.md)
 
-* 配置
+* [配置](/Hbase/Configuration/README.md)
 
-* Shell
+* [Shell](/Hbase/Shell/README.md)
 
-* 工具
+* [工具](/Hbase/Tools/README.md)
 
-* 优化
+* [优化](/Hbase/Optimization/README.md)
 
-* 测试
+* [测试](/Hbase/Test)
