@@ -14,7 +14,7 @@ log4j.rootLogger = [level],appenderName,appenderName2,...
 
 * appenderName就是指定日志信息输出到哪个地方。可同时指定多个输出目的。
 
-### 配置日志信息输出目的地Appender32131
+### 配置日志信息输出目的地Appender
 
 其语法为:
 ```
