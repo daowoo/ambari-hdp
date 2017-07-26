@@ -70,7 +70,7 @@ HBase中可以触发compaction的因素有很多，最常见的因素有这么�
 * RatioBasedCompactionPolicy，从老到新逐一扫描所有候选文件，满足其中条件之一便停止扫描：
 
  1. 当前文件大小 < 比它更新的所有文件大小总和 * ratio，其中ratio是一个可变的比例，在高峰期时ratio为1.2，非高峰期为5，也就是非高峰期允许compact更大的文件。那什么时候是高峰期，什么时候是非高峰期呢？用户可以配置参数hbase.offpeak.start.hour和hbase.offpeak.end.hour来设置高峰期
- 
+
  2. 当前所剩候选文件数 <= hbase.store.compaction.min（默认为3）
 
 停止扫描后，待合并文件就选择出来了，即为当前扫描文件+比它更新的所有文件
@@ -113,4 +113,3 @@ HBase实现中有一个专门的线程CompactSplitThead负责接收compact请求
 
 ## 总结
 本文重点从减少IO的层面对Compaction进行了介绍，其实Compaction还是HBase删除过期数据的唯一手段。文章下半部分着眼于Compaction的整个流程，细化分阶段分别进行了梳理。通过本文的介绍，一方面希望读者对Compaction的左右有一个清晰的认识，另一方面能够从流程方面了解Compaction的工作原理。然而，Compaction一直是HBase整个架构体系中最重要的一环，对它的改造也从来没有停止过，改造的重点就是上文的核心点－’选择合适的HFile合并’。
-
