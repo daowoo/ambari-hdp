@@ -25,8 +25,13 @@ hbase> scan 't1', {COLUMNS => 'c1', TIMERANGE => [1303668804, 1303668904]}
 hbase> scan 't1', {REVERSED => true}
 
 # 过滤显示表t1的数据
-hbase> scan 't1', {FILTER => "(PrefixFilter ('row2') AND
-    (QualifierFilter (>=, 'binary:xyz'))) AND (TimestampsFilter ( 123, 456))"}
+hbase> scan 't1', {FILTER => "PrefixFilter ('row2') AND
+QualifierFilter(>=, 'binary:xyz') AND
+TimestampsFilter(123, 456) AND
+ValueFilter(=,'regexstring:^\\d2$') AND
+ValueFilter(=,'binaryprefix:abc') AND
+ValueFilter(!=,'substring:123') AND
+DependentColumnFilter('f1','name',true,=,'substring:panhongfa')"}
 
 # RAW为true，显示出表t1的所有数据，包括已经删除的
 hbase> scan 't1', {RAW => true, VERSIONS => 10}
@@ -35,6 +40,8 @@ hbase> scan 't1', {RAW => true, VERSIONS => 10}
 hbase> t11 = get_table 't1'
 hbase> t11.scan
 ```
+
+tt.scan VERSIONS=>3,FILTER=>"RowFilter(<=,'binary:User00000005') AND SingleColumnValueFilter('f1','name',=,'substring:p')"
 
 ## append
 在表的Cell的值后面追加字符串。

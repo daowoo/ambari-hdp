@@ -44,12 +44,12 @@ hbase(main):042:0> t1 = create 't2', 'f1'
 ```
 # 查看默认命名空间'default'下的表test1的结构和属性
 hbase(main):013:0> desc 'test1'
-Table test1 is ENABLED                                                                                                              
-test1                                                                                                                               
-COLUMN FAMILIES DESCRIPTION                                                                                                         
+Table test1 is ENABLED
+test1
+COLUMN FAMILIES DESCRIPTION
 {NAME => 'Toutiao', BLOOMFILTER => 'ROW', VERSIONS => '1', IN_MEMORY => 'false', KEEP_DELETED_CELLS => 'FALSE', DATA_BLOCK_ENCODING
 => 'NONE', TTL => '259200 SECONDS (3 DAYS)', COMPRESSION => 'SNAPPY', MIN_VERSIONS => '0', BLOCKCACHE => 'true', BLOCKSIZE => '65536
-', REPLICATION_SCOPE => '0'}                                                                                                        
+', REPLICATION_SCOPE => '0'}
 1 row(s) in 0.0230 seconds
 ```
 
@@ -125,8 +125,8 @@ hbase(main):046:0> disable 'test1'
 ```
 # 关闭所有以test开头的表
 hbase(main):027:0> disable_all 'test.*'
-test                                                                                                                                                                                         
-test1                                                                                                                                                                                        
+test
+test1
 
 Disable the above 2 tables (y/n)?
 y
@@ -138,7 +138,7 @@ y
 
 ```
 hbase(main):028:0> is_disabled 'test'
-true                                                                                                                                                                                         
+true
 0 row(s) in 0.0230 seconds
 ```
 
@@ -161,11 +161,11 @@ Drop the named table. Table must first be disabled:
 
 ```
 hbase(main):030:0> drop_all 't.*'
-t1                                                                                                                                                                                           
-t2                                                                                                                                                                                           
-t3                                                                                                                                                                                           
-test                                                                                                                                                                                         
-test1                                                                                                                                                                                        
+t1
+t2
+t3
+test
+test1
 
 Drop the above 5 tables (y/n)?
 n
@@ -184,8 +184,8 @@ hbase(main):047:0> enable 'test1'
 
 ```
 hbase(main):031:0> enable_all 'test.*'
-test                                                                                                                                                                                         
-test1                                                                                                                                                                                        
+test
+test1
 
 Enable the above 2 tables (y/n)?
 y
@@ -197,7 +197,7 @@ y
 
 ```
 hbase(main):040:0> is_enabled 'test1'
-true                                                                                                                                                                                         
+true
 0 row(s) in 0.0150 seconds
 ```
 
@@ -228,14 +228,14 @@ t1d.describe
 ```
 
 ## show_filters
-显示所有的过滤器。
+显示所有的过滤器，这里只展示命令的执行结果，具体的介绍参考API中关于Filter的专门介绍。
 
 ```
 hbase(main):034:0> show_filters
-DependentColumnFilter   
-KeyOnlyFilter   
-ColumnCountGetFilter  
-SingleColumnValueFilter  
+DependentColumnFilter
+KeyOnlyFilter
+ColumnCountGetFilter
+SingleColumnValueFilter
 PrefixFilter
 SingleColumnValueExcludeFilter
 FirstKeyOnlyFilter
@@ -251,6 +251,7 @@ PageFilter
 ValueFilter
 ColumnPaginationFilter
 ```
+
 
 ## alter_statu
 返回alter命令的执行状态，指示在alter操作过程中表的regions中有那些region接收到了更新。
