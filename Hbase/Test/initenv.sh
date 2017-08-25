@@ -57,26 +57,23 @@ sudo yum repolist
 echo 'install all tools'
 sudo yum install tree -y
 sudo yum install wget -y
-sudo yum install yum-utils -y
 sudo yum install bash-completion -y
+sudo yum install yum-utils -y
 
 #stop firewalld
 echo 'stop firewalld and selinux'
-sudo systemctl stop firewalld.service
 sudo systemctl disable firewalld.service
+sudo systemctl stop firewalld.service
 setenforce 0
 sudo sed -i 's/SELINUX=.*/SELINUX=disabled/' /etc/selinux/config
 
 #ntp config
 echo 'ntp client config'
 sudo yum install ntp -y
-sudo sed -i 's/server [0-3].centos.*/server ${ntpserver}/' /etc/ntp.conf
+sudo sed -i "s/server [0-3].centos.*/server ${ntpserver}/" /etc/ntp.conf
 sudo systemctl start ntpd.service
 sudo systemctl enable ntpd.service
 sudo timedatectl set-ntp yes
-
-ntpdate -u ${ntpserver}
-ntpq -p
 
 #mount nfs
 echo 'mount nfs disk'
@@ -90,6 +87,9 @@ sudo yum erase -y snappy.x86_64
 sudo systemctl stop chronyd.service
 sudo systemctl disable chronyd.service
 sudo systemctl restart ntpd.service
+
+ntpdate -u ${ntpserver}
+ntpq -p
 
 #Increasing swap space
 echo 'swap config'
@@ -127,6 +127,7 @@ export JRE_HOME=$JAVA_HOME/jre
 
 export CLASSPATH=.:$JAVA_HOME/lib:$CLASSPATH
 export PATH=$JAVA_HOME/bin:$PATH
+
 eof
 source /etc/profile
 else

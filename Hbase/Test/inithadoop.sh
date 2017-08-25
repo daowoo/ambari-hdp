@@ -14,7 +14,7 @@ hadoop_var=$(sed -n '/^#HADOOP_HOME$/'p /etc/profile)
 if [ ! $hadoop_var ]; then
   echo "HADOOP_HOME UNSET"
   cat << 'eof' >> /etc/profile
-  #HADOOP_HOME
+#HADOOP_HOME
 export HADOOP_HOME=/home/hadoop/hadoop-2.7.4
 export HADOOP_COMMON_HOME=$HADOOP_HOME
 export HADOOP_HDFS_HOME=$HADOOP_HOME
@@ -24,6 +24,7 @@ export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop
 
 export CLASSPATH=.:$HADOOP_HOME/lib:$CLASSPATH
 export PATH=$HADOOP_HOME/bin:$HADOOP_HOME/sbin:$PATH
+
 eof
 source /etc/profile
 else
@@ -128,6 +129,10 @@ cat << eof >> /etc/hadoop/yarn-site.xml
     <name>yarn.resourcemanager.webapp.address</name>
     <value>hbase1.panhongfa.com:8088</value>
   </property>
+    <property>
+    <name>yarn.log-aggregation-enable</name>
+    <value>true</value>
+  </property>
 </configuration>
 eof
 
@@ -142,5 +147,5 @@ sed -i '/${JAVA_HOME}/s@${JAVA_HOME}@/home/hadoop/java/jdk1.8.0_112@' /etc/hadoo
 sed -i -e '/^#.export JAVA_HOME=/s/^#//' -e '/export JAVA_HOME=.*/s@=.*@=/home/hadoop/java/jdk1.8.0_112@' /etc/hadoop/yarn-env.sh
 
 #chmod
-sudo chown -R hadoop:hadoop /home/hadoop/hadoop-2.7.4
-sudo chmod -R 700 /home/hadoop/hadoop-2.7.4
+sudo chown -R hadoop:hadoop /home/hadoop
+sudo chmod -R u+w,g+w /home/hadoop/hadoop-2.7.4
