@@ -31,3 +31,10 @@
 | java      | jdk8   |
 
 ## 系统初始化
+```shell
+
+```
+
+•io.file.buffer.size
+•默认值 4096
+•這是读写 sequence file 的 buffer size, 可减少 I/O 次数。在大型的 Hadoop cluster，建议可设定为 65536 到 131072。

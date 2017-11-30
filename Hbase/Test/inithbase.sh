@@ -53,6 +53,9 @@ eof
 sed -i -e '/^#.export JAVA_HOME=/s/^#//' -e '/export JAVA_HOME=.*/s@=.*@=/home/hadoop/java/jdk1.8.0_112@' /etc/hbase/hbase-env.sh
 sed -i -e '/^#.export HBASE_MANAGES_ZK=/s/^#//' -e '/export HBASE_MANAGES_ZK=.*/s@=.*@=false@' /etc/hbase/hbase-env.sh
 
+sed -i '/^export HBASE_MASTER_OPTS/s/^/#/' /etc/hbase/hbase-env.sh
+sed -i '/^export HBASE_REGIONSERVER_OPTS/s/^/#/' /etc/hbase/hbase-env.sh
+
 #chmod
 sudo chown -R hadoop:hadoop /home/hadoop/hbase-1.3.1
 sudo chmod -R u+w,g+w /home/hadoop/hbase-1.3.1

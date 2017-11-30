@@ -72,7 +72,7 @@ hbase(main):038:0> list 'ns1:.*'
 
 ## alter
 修改，增加，删除表的列族信息、属性、配置等。
-
+CREATE TABLE IF NOT EXISTS my_schema.my_table (org_id CHAR(15) not null, entity_id CHAR(15) not null, payload binary(1000),CONSTRAINT pk PRIMARY KEY (org_id, entity_id));
 ```
 #对于表t1，如果t1含有f1列族，则将f1列族的版本数设为5.
 # 如果t1不含f1列数，则添加f1列族到表t1上，并将f1的版本数设置为5.
