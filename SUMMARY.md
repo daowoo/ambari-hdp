@@ -5,4 +5,3 @@
 * [HBase](/Hbase/README.md)
 
 * [Ranger](/Ranger/README.md)
-

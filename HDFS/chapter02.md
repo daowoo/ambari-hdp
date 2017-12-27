@@ -3,7 +3,7 @@
 
 ## NameNode如何工作
 NameNode主要是用来保存HDFS的元数据信息，比如命名空间信息，块信息等等。当它运行的时候，这些信息是存在内存中的。但是这些信息也可以持久化到磁盘上。如下图所示：
-![](namenode01.png)
+![](img\namenode01.png)
 
 上图展示来NameNode怎么把元数据保存到磁盘上，这里有两个不同的文件：
 * fsimage：它是NameNode启动时对整个文件系统的快照，注意，它不一定是最新的。
@@ -19,7 +19,7 @@ NameNode主要是用来保存HDFS的元数据信息，比如命名空间信息�
 
 ## 引入Second NameNode
 Secondary NameNode就是为了帮助解决上述问题提出的，它的职责是合并NameNode的edits到fsimage文件中，其工作原理如图所示：
-![](second-namenode01.png)
+![](img\second-namenode01.png)
 
 * 首先，它定时到NameNode去获取edits，并更新到fsimage上。
 * 一旦它有新的fsimage文件，它将其拷贝回NameNode上。

@@ -16,7 +16,7 @@
 
 ```
 hbase(main):004:0> balancer
-true                                                                                                                                
+true
 0 row(s) in 0.0180 seconds
 ```
 
@@ -33,7 +33,7 @@ hbase(main):028:0> balance_switch false
 
 ```
 hbase(main):006:0> balancer_enabled
-false                                                                                                                               
+false
 0 row(s) in 0.0100 seconds
 ```
 

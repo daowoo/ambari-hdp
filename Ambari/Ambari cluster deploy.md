@@ -150,10 +150,8 @@ ALTER ROLE ranger SET search_path to 'ranger', 'public';
 
 ```
 
-
-
 ### 安装Ambari
-* install ambari server
+* install
 ```shell
 yum install -y ambari-server.x86_64
 ```
@@ -207,40 +205,4 @@ ambari-server start
 * 配置Grafana管理员密码时不能够太短，最好超过八个字符，否则在启动过程中会因为密码验证问题导致部分服务无法启动。
 
 ### 启动组件
-![安装完成](ambari.png)
-
-
-Virutalbox存放VM的路径找到你的虚拟机的文件夹并进入
-# 记录原来磁盘文件的uuid
-vboxmanage showhdinfo "centos-vm-disk1.vmdk"
-
-UUID: c4d43703-0f2c-462a-bb0f-427d938b8c15
-
-# Clone the .vmdk image to a .vdi.
-vboxmanage clonehd "centos-vm-disk1.vmdk" "new-virtualdisk.vdi" --format vdi
-
-# Resize the new .vdi image (30720 == 30 GB).
-vboxmanage modifyhd "new-virtualdisk.vdi" --resize 30720
-
-# Optional; switch back to a .vmdk.
-VBoxManage clonehd "new-virtualdisk.vdi" "resized.vmdk" --format vmdk
-vboxmanage showhdinfo "resized.vmdk"
-
-# 进入系统后通过cfdisk工具来创建主分区
-cfdisk /dev/sda
-/*需要主要的是分区type必须为Linux LVM(8e)*/
-
-# 利用pvcreate命令给新的分区创建物理卷
-pvcreate /dev/sda3
-
-# 查看VG Name，我自己的VG Name是centos
-pvdisplay
-
-# 新分区扩展到centos这个组
-vgextend centos /dev/sda3
-
-# 扩展逻辑分区
-lvextend /dev/mapper/centos-root /dev/sda3
-
-# 变更生效
-xfs_growfs /dev/mapper/centos-root
+![安装完成](img\ambari.png)
