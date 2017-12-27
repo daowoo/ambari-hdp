@@ -99,9 +99,5 @@ SELECT diff, count(diff) cnt GROUP BY diff ORDER BY cnt DESC;
 
 SELECT * FROM result WHERE file='11-21' AND type='A' LIMIT 20;
 
-
-
 select * from tbl_jion_res where station='广埠屯' limit 100;
-
-
 ```

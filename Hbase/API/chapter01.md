@@ -146,5 +146,3 @@ valueComparator,比较器，这里比较的对象是参考列的值和设定值�
 * SingleColumnValueFilter
 
 单列值过滤器，由一列的值决定这一行的数据是否被过滤。在它的具体对象上，可以调用setFilterIfMissing(true)或者setFilterIfMissing(false)，默认的值是false，其作用是，对于咱们要使用作为条件的列，如果这一列本身就不存在，那么如果为true，这样的行将会被过滤掉，如果为false，这样的行会包含在结果集中。
-
-*
