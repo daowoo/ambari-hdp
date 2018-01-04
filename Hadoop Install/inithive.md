@@ -38,7 +38,7 @@ if [ ! $hive_var ]; then
 export HIVE_HOME=/home/hadoop/hive-2.2.0
 export HIVE_CONF_DIR=/home/hadoop/hive-2.2.0/conf
 export PATH=$HIVE_HOME/bin:$PATH
-eof
+'eof'
 source /etc/profile
 else
   echo "HIVE_HOME EXIST"
