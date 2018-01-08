@@ -1,7 +1,7 @@
 # 安装Postgresql9.5
 ## 设置安装源
 ```sh
-[root@localhost ~]# yum install https://download.postgresql.org/pub/repos/yum/9.5/redhat/rhel-7-x86_64/pgdg-
+[root@localhost ~]# yum install https://download.postgresql.org/pub/repos/yum/9.5/redhat/rhel-7-x86_64/pgdg-centos95-9.5-2.noarch.rpm
 ```
 
 ## 安装二进制包
@@ -23,6 +23,7 @@ drwxr-xr-x. 8 root root 4096 Oct 25 17:19 share    #配置文件模板文件以�
 ```
 
 ## 创建PG数据库目录
+这里我们没有采用PG默认的数据库目录`/var/lib/pgsql/9.5/data`,所以要支持systemctl方式自启动就必须在root用户下设置环境变量或修改pg服务注册文件中PGDATA的定义。
 ```sh
 [root@localhost home]# mkdir -p /home/pgsql/data  #创建PG数据库目录
 [root@localhost home]# chown -R postgres.postgres pgsql #更改目录所属用户和用户组structurestructure

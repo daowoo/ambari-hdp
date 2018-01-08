@@ -68,13 +68,17 @@ sudo chmod -R u+w,g+w /home/hadoop/zookeeper-3.4.11
 scp -r /home/hadoop/zookeeper-3.4.11 hadoop@node2.bigdata.wh.com:/home/hadoop/
 scp -r /home/hadoop/zookeeper-3.4.11 hadoop@node3.bigdata.wh.com:/home/hadoop/
 
-sudo ln -s /home/hadoop/zookeeper-3.4.11/etc/hadoop /etc/zookeeper
+sudo ln -s /home/hadoop/zookeeper-3.4.11/conf /etc/zookeeper
 ```
 
 最后需要注意的是，node2和node3节点的data目录内的myid文件中的值必须根据实际情况进行自增。
 
 ## 启动ZK
+分别在各个节点下切换到hadoop用户来执行以下启动命令。不过需要注意的是zk启动过程中默认在用户当前目录创建日志文件zookeeper.out，如果当前目前权限不正确会出现启动错误。
 ```sh
+su hadoop
+cd ~
+
 zkServer.sh start
 zkServer.sh status
 ```

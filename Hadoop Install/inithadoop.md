@@ -258,15 +258,32 @@ hdfs namenode -format
 ```
 
 ## 启动HADOOP
+在node1节点上启用hadoop，由于配置了hadoop用户免密登录，会在node2和node3上分别启动datanode和nodemanager
 ```sh
 #start hadoop
-start-all.sh
-mr-jobhistory-daemon.sh start historyserver
+[hadoop@node1 root]$ start-all.sh
+This script is Deprecated. Instead use start-dfs.sh and start-yarn.sh
+Starting namenodes on [node1.bigdata.wh.com]
+node1.bigdata.wh.com: starting namenode, logging to /home/hadoop/hadoop-2.7.5/logs/hadoop-hadoop-namenode-node1.bigdata.wh.com.out
+node2.bigdata.wh.com: starting datanode, logging to /home/hadoop/hadoop-2.7.5/logs/hadoop-hadoop-datanode-node2.bigdata.wh.com.out
+node3.bigdata.wh.com: starting datanode, logging to /home/hadoop/hadoop-2.7.5/logs/hadoop-hadoop-datanode-node3.bigdata.wh.com.out
+Starting secondary namenodes [node1.bigdata.wh.com]
+node1.bigdata.wh.com: starting secondarynamenode, logging to /home/hadoop/hadoop-2.7.5/logs/hadoop-hadoop-secondarynamenode-node1.bigdata.wh.com.out
+starting yarn daemons
+starting resourcemanager, logging to /home/hadoop/hadoop-2.7.5/logs/yarn-hadoop-resourcemanager-node1.bigdata.wh.com.out
+node3.bigdata.wh.com: starting nodemanager, logging to /home/hadoop/hadoop-2.7.5/logs/yarn-hadoop-nodemanager-node3.bigdata.wh.com.out
+node2.bigdata.wh.com: starting nodemanager, logging to /home/hadoop/hadoop-2.7.5/logs/yarn-hadoop-nodemanager-node2.bigdata.wh.com.out
 
+[hadoop@node1 root]$ mr-jobhistory-daemon.sh start historyserver
+starting historyserver, logging to /home/hadoop/hadoop-2.7.5/logs/mapred-hadoop-historyserver-node1.bigdata.wh.com.out
+```
+
+## 验证URL
+```sh
 #check hadoop web
-wget --timeout=5 --tries=1 http://node1.bigdata.wh.com:50070 -O /dev/null
-wget --timeout=5 --tries=1 http://node1.bigdata.wh.com:8088 -O /dev/null
-wget --timeout=5 --tries=1 http://node1.bigdata.wh.com:19888 -O /dev/null
+wget --timeout=5 --tries=1 http://node1.bigdata.wh.com:50070 -O /dev/null #hdfs webUI
+wget --timeout=5 --tries=1 http://node1.bigdata.wh.com:8088 -O /dev/null  #yarn webui
+wget --timeout=5 --tries=1 http://node1.bigdata.wh.com:19888 -O /dev/null #JobHistory
 
 #check hadoop MR
 echo "My first hadoop example. Hello Hadoop in input. " > input
