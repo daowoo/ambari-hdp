@@ -11,12 +11,12 @@ generatedata是基于php开发，可自定义复杂的数据格式，支持多�
 * apache http服务
 
 ### 安装过程
-安装mysql数据库
+#### 安装mysql数据库
 ```shell
-yum -y install mariadb mariadb-serve
+yum -y install mariadb mariadb-server
 ```
 
-完成mysql初始化配置
+#### 完成mysql初始化配置
 ```shell
 [root@repo yum.repos.d]# mysql_secure_installation
 
@@ -63,7 +63,7 @@ installation should now be secure.
 Thanks for using MariaDB!
 ```
 
-登录mysql并创建数据库
+#### 登录mysql并创建数据库
 ```shell
 [root@repo yum.repos.d]# mysql -u root -p
 MariaDB [(none)]> create database csv_db;
@@ -82,13 +82,22 @@ MariaDB [(none)]> show databases;
 5 rows in set (0.00 sec)
 ```
 
-安装php和httpd
-```shell
+#### 查询用户及权限
+```sh
+# 查询所有用户的权限
+SELECT DISTINCT CONCAT('User: ''',user,'''@''',host,''';') AS query FROM mysql.user;
+
+# 查询指定用户的权限
+SHOW GRANTS FOR 'username'@'%';
+```
+
+#### 安装php和httpd
+```sh
 yum install -y php httpd
 ```
 
-配置webServer
-```shell
+#### 配置webServer
+```sh
 # 解压generatedata包
 tar -zxvf benkeen-generatedata-3.2.8-1-ga5d6fea.tar.gz
 mv benkeen-generatedata-a5d6fea generatedata
@@ -115,3 +124,29 @@ IncludeOptional conf.d/php.conf             #http新版本调整了主配置文�
 IncludeOptional conf.d/generate_data.conf
 IncludeOptional conf.d/repos.conf
 ```
+
+如果是在`ubuntu`中安装`apache2`作为http服务器，配置过程与上面类似，不过添加php支持的过程会有一些不一样，具体过程如下
+```sh
+#首先安装apache2，然后再添加php5支持
+sudo apt-get install php7.0 libapache2-mod-php7.0
+```
+
+安装以后php的模块放到了mods-enabled目录下，会自动被加载的，然后把虚拟主机文件generate.conf放在sites-enabled中。
+![](img/php.png)
+
+然后还有一点是添加监听端口8008，方法是编辑ports.conf文件增加虚拟主机端口8008。
+
+![ ](img/ports.png)
+
+#### 配置generatedata
+通过 http://192.168.70.200:8008 进入generatedata主页，填写`mariadb`的连接信息
+```config
+url:localhost
+db:csv_db
+name:root
+pwd:******
+```
+
+然后下一步完成`setting.php`文件的自动创建，这些有以下两点需要注意
+* php页面所在目录中的`cache`目录的权限必须设置为777
+* php页面所在目录必须允许`other`用户写入，因为httpd或apache2默认均是以apache用户启动的，并会在该目录中创建setting.php配置文件
