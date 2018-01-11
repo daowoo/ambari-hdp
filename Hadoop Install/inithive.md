@@ -40,8 +40,8 @@ hdfs dfs -mkdir -p /user/hive/log
 
 我们将以hadoop用户来启动hive各个服务，所以目录的权限需要作出对应的修改
 ```sh
-hdfs dfs -chown -R hadoop /user/hive
-hdfs dfs -chmod -R u+w,g+w /user/hive
+hdfs dfs -chown -R hive:hadoop /user/hive
+hdfs dfs -chmod -R u+w,g+w,o+w /user/hive
 ```
 
 ## 安装Hive
@@ -218,7 +218,7 @@ cat << eof >> /etc/hive/hive-site.xml
 
 <property>
   <name>hive.server2.thrift.bind.host</name>
-  <value>0.0.0.0</value>
+  <value>node1.bigdata.wh.com</value>
 </property>
 
 <property>
@@ -271,10 +271,10 @@ hive --service hiveserver2 &
 
 通过beeline连接hive
 ```sh
-!connect jdbc:hive2://hbase1.panhongfa.com:10000/default
-!connect jdbc:hive2://hbase1.panhongfa.com:2181,hbase2.panhongfa.com:2181,hbase3.panhongfa.com:2181/default;serviceDiscoveryMode=zooKeeper;zooKeeperNamespace=hiveserver2_zk
-```
-#client
-beeline
+!connect jdbc:hive2://node2.bigdata.wh.com:10000/default
 !connect jdbc:hive2://node1.bigdata.wh.com:10000/default
-!connect jdbc:hive2://node1.bigdata.wh.com:2181,node2.bigdata.wh.com:2181,node3.bigdata.wh.com:2181/default;serviceDiscoveryMode=zooKeeper;zooKeeperNamespace=hiveserver2_zk
+
+!connect jdbc:hive2://node1.bigdata.wh.com:2181,node2.bigdata.wh.com:2181,node3.bigdata.wh.com:2181;serviceDiscoveryMode=zooKeeper;zooKeeperNamespace=hiveserver2_zk
+```
+
+jdbc:hive2://nn.daowoo.com:2181,snn.daowoo.com:2181,hive.daowoo.com:2181/;serviceDiscoveryMode=zooKeeper;zooKeeperNamespace=hiveserver2
